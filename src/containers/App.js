@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+
 import './App.css';
-import Person from './Person/Person';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 //Main app component
 class App extends Component {
@@ -56,59 +58,23 @@ class App extends Component {
 
   // This render the virtual DOM and finally react updates/re-render the actual DOM
   render() {
-    // Style for button
-    const style = {
-      backgroundColor: '#27ae60',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid #27ae60',
-      padding: '16px',
-      cursor: 'pointer'
-    };
-
     let persons = null;
-
-    if( this.state.showPersons ) {
-      persons = (
-        <div>
-          { this.state.persons.map((person, index) => {
-            return <Person 
-                    click={this.deletePersonHandler.bind(this, index)}
-                    name={person.name} 
-                    age={person.age}
-                    key={person.id}
-                    change={(event) => this.nameChangedHandler(event, person.id)} />
-          }) }
-        </div>
-      );
-
-      style.backgroundColor = 'red';
-      style.border = '1px solid red';
-
-    }
     
-    // Adding classes dynamically
-    const classes = [];
-
-    if( this.state.persons.length <= 2 ) {
-      classes.push('red'); // classes = ['red']
-    }
-
-    if( this.state.persons.length <= 1 ) {
-      classes.push('bold'); // classes = ['red', 'bold']
+    if( this.state.showPersons ) {
+      persons = <Persons 
+                  persons={this.state.persons}
+                  clicked={this.deletePersonHandler}
+                  changed={this.nameChangedHandler}  />;
     }
 
     // This is the main part. All of the code which is written is returned from here!!!
     return (
       <div className="App">
-        <h1>Welcome to my page!</h1>
-        <p className={classes.join(' ')}>This is really working!!!</p>
-        <button 
-          style={style}
-          onClick={this.togglePersonsHandler}>Toggle Persons</button>
-        
+        <Cockpit 
+          showPersons={this.state.showPersons}
+          persons={this.state.persons}
+          toggle={this.togglePersonsHandler} />
         { persons }
-
       </div>
     );
   }
